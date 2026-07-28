@@ -1,5 +1,5 @@
 {
-  "name": "BYOM AI Browser Agent",
-  "description": "A lightweight Chrome Extension agent that uses your own Gemini or Ollama models to analyze and interact with webpages.",
+  "name": "ZANYSURF Browser Agent",
+  "description": "Autonomous AI browser agent for Chrome and Edge. Give it a goal in plain English and it plans, navigates, clicks, fills forms, and reports back — powered by local Ollama or your own cloud API keys.",
   "requestFramePermissions": []
 }

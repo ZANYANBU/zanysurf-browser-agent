@@ -1,6 +1,6 @@
-[![CI](https://github.com/ZANYANBU/Chrome_Assist_AI/actions/workflows/ci.yml/badge.svg)](https://github.com/ZANYANBU/Chrome_Assist_AI/actions/workflows/ci.yml)
+[![CI](https://github.com/ZANYANBU/zanysurf-browser-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/ZANYANBU/zanysurf-browser-agent/actions/workflows/ci.yml)
 
-# Contributing to ZANYSURF
+# Contributing to ZANYSURF Browser Agent
 
 First off — thank you. Every contribution matters.
 
@@ -19,26 +19,41 @@ First off — thank you. Every contribution matters.
 - Improve test coverage
 
 ## Development setup
+
 ```bash
-git clone https://github.com/ZANYANBU/Chrome_Assist_AI
-cd Chrome_Assist_AI
-npm install
-npm test           # must show 15/15 passing
+git clone https://github.com/ZANYANBU/zanysurf-browser-agent
+cd zanysurf-browser-agent
 ```
 
-Load `extension/` folder in Chrome developer mode.
+The extension has **no build step and no runtime dependencies** — it is plain MV3 JavaScript.
+
+1. Open `chrome://extensions` (or `edge://extensions`)
+2. Enable **Developer mode**
+3. **Load unpacked** → select the `extension/` folder
+4. Edit files in `extension/`, then hit reload on the extension card
+
+`dev-playground/` is a separate Vite sandbox for prototyping UI. It is not part of the shipped extension and is not required to contribute.
+
+## Checks
+
+```bash
+node qa/run-static-validation.mjs   # JS syntax + JSON validity across extension/
+```
+
+CI runs this on every push and pull request.
 
 ## Rules
-1. Always sync root ↔ extension/ (identical files)
-2. Run `npm test` before opening a PR
+1. Keep all shipped code inside `extension/`
+2. Run the static validation before opening a PR
 3. One feature/fix per PR
 4. Commit format: `feat:`, `fix:`, `docs:`, `test:`
+5. Don't add a feature to the README that isn't in the code
 
 ## PR checklist
-- [ ] Tests pass (15/15)
-- [ ] Root and extension/ are synced
-- [ ] I tested in Chrome manually
+- [ ] Static validation passes
+- [ ] I loaded `extension/` and tested the change manually
+- [ ] README/CHANGELOG updated if behavior changed
 - [ ] Description explains what and why
 
-Built by Anbu Chelvan Valavan. 
+Built by Anbu Chelvan Valavan.
 Open to all contributors. MIT licensed.

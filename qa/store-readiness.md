@@ -15,7 +15,7 @@
 - [PASS] Updated benchmark in `qa/performance-report.json` reports steady-state `domMappingMs` under 200ms.
 
 ## Store Listing Draft
-- Name (<=45): ZANYSURF AI Browser Agent
+- Name (<=45): ZANYSURF Browser Agent
 - Short description (<=132): Autonomous Chrome AI agent for planning, research, and browser task execution with local or cloud LLM support.
 - Category: Productivity
 

@@ -64,7 +64,7 @@ Architecture: ReAct + Plan-and-Execute + Reflexion, TabOrchestrator for cross-ta
 I am a 2nd year CSE student. Built this to understand how browser agents work at the implementation level.
 
 Demo: [YouTube link]
-GitHub: https://github.com/ZANYANBU/Chrome_Assist_AI
+GitHub: https://github.com/ZANYANBU/zanysurf-browser-agent
 
 ---
 

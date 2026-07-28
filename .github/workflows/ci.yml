@@ -7,18 +7,6 @@ on:
     branches: [main]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    name: Unit Tests
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm test -- --runInBand
-      
   validate:
     runs-on: ubuntu-latest
     name: Static Validation
@@ -27,31 +15,31 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - name: Check root/extension sync
-        run: |
-          for f in background.js content.js popup.js popup.html popup.css manifest.json; do
-            if ! diff -q "$f" "extension/$f" > /dev/null 2>&1; then
-              echo "SYNC FAIL: $f differs from extension/$f"
-              exit 1
-            fi
-          done
-          echo "All files synced ✅"
 
-  build:
+      # The extension is dependency-free MV3 JavaScript — nothing to install.
+      - name: Validate extension syntax, manifests, and symbols
+        run: node qa/run-static-validation.mjs
+
+      - name: Upload validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-validation-report
+          path: qa/static-validation-report.json
+
+  package:
     runs-on: ubuntu-latest
-    name: Build
-    needs: [test, validate]
+    name: Package Extension
+    needs: [validate]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run build
+
+      - name: Zip extension/ for store upload
+        run: |
+          cd extension
+          zip -r ../zanysurf-extension.zip . -x '*.DS_Store'
+
       - uses: actions/upload-artifact@v4
         with:
-          name: zanysurf-build
-          path: '*.zip'
+          name: zanysurf-extension
+          path: zanysurf-extension.zip
