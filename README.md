@@ -12,8 +12,9 @@ An autonomous AI agent that lives in your browser — it plans, navigates, click
 <img src="https://img.shields.io/badge/Install%20on%20Microsoft%20Edge-0078D4?style=for-the-badge&logo=microsoftedge&logoColor=white" alt="Install on Microsoft Edge" />
 </a>
 
+[![Edge Add-ons](https://img.shields.io/badge/Edge%20Add--ons-v1.0.1-0078D4)](https://microsoftedge.microsoft.com/addons/detail/pmadlohecccigmfcmickngnlikhmnjpa)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-2ea44f)](https://developer.chrome.com/docs/extensions/mv3/intro/)
-[![Version](https://img.shields.io/badge/Version-3.0.0-6f42c1)](extension/manifest.json)
+[![Source](https://img.shields.io/badge/Source-v3.0.0-6f42c1)](CHANGELOG.md)
 [![Runs Offline](https://img.shields.io/badge/Runs%20Offline-Ollama-brightgreen)](https://ollama.com)
 [![License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
@@ -23,38 +24,140 @@ An autonomous AI agent that lives in your browser — it plans, navigates, click
 
 ## Install
 
-**Microsoft Edge — one click:**
-[Get ZANYSURF Browser Agent on Edge Add-ons →](https://microsoftedge.microsoft.com/addons/detail/pmadlohecccigmfcmickngnlikhmnjpa)
+### Option A — Microsoft Edge Add-ons (one click)
 
-**Chrome / Edge — from source:**
+**[→ Install ZANYSURF Browser Agent from Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/pmadlohecccigmfcmickngnlikhmnjpa)**
 
-1. Download or clone this repo
-2. Open `chrome://extensions` (or `edge://extensions`)
-3. Enable **Developer mode**
-4. Click **Load unpacked** and select the **`extension/`** folder
+```
+https://microsoftedge.microsoft.com/addons/detail/pmadlohecccigmfcmickngnlikhmnjpa
+```
 
-> Load the `extension/` folder — not the repo root. `dev-playground/` is build tooling, not the extension.
+The reviewed, published build. Auto-updates. Currently **v1.0.1**, supporting **Ollama** and **Gemini**.
+
+### Option B — Load from source (Chrome or Edge)
+
+The source in this repo is **ahead of the store build** — see [Which build am I running?](#which-build-am-i-running) below.
+
+1. Download this repo (**Code → Download ZIP**, then unzip) or clone it:
+   ```bash
+   git clone https://github.com/ZANYANBU/zanysurf-browser-agent
+   ```
+2. Open `edge://extensions` in Edge, or `chrome://extensions` in Chrome
+3. Toggle **Developer mode** on (top-right in Chrome, left sidebar in Edge)
+4. Click **Load unpacked**
+5. Select the **`extension/`** folder
+
+> **Select `extension/`, not the repo root.** The root has no manifest and the load will fail.
+> `dev-playground/` is a Vite sandbox for UI prototyping — it is not the extension.
+
+### Which build am I running?
+
+| | Edge Add-ons | This repo |
+|---|---|---|
+| Version | 1.0.1 | 3.0.0 |
+| Providers | Ollama, Gemini | Ollama, Gemini, OpenAI, Claude, Groq, Mistral, Edge Built-in |
+| Macro recorder | — | Yes |
+| Scheduler & workflows | — | Yes |
+| Messaging API | — | 16 endpoints |
+| Encrypted key vault | — | AES-GCM-256 |
+| Updates | Automatic | Manual (`git pull` + reload) |
+
+If a feature below is missing in your side panel, you are on the store build. Load from source to get it.
 
 ---
 
-## 60-Second Quick Start
+## Setup Guide
 
-**Free and fully local (recommended)**
+### Step 1 — Open the side panel
 
-```bash
-# 1. Install Ollama → https://ollama.com
-ollama pull llama3.2
-```
+Press **`Alt+Z`**, or click the ZANYSURF icon in your toolbar.
 
-Then open the ZANYSURF side panel (`Alt+Z`), pick **Ollama**, and type a goal:
+In Edge, pin it for one-click access: **Extensions (puzzle icon) → ⋯ next to ZANYSURF → Show in toolbar**.
 
-> *"Find the top 3 espresso machines under $500 and export a CSV comparison."*
+### Step 2 — Choose how it thinks
 
-Nothing leaves your machine. No API key, no account, no telemetry.
+Pick one. Local is free and private; cloud is faster and stronger.
 
-**Or bring your own cloud key**
+<details open>
+<summary><b>Option 1: Ollama — free, local, fully private (recommended)</b></summary>
 
-Open the side panel → Settings → pick a provider → unlock the vault with a passphrase → paste your key.
+Nothing leaves your machine. No API key, no account, no cost.
+
+1. Install Ollama from **[ollama.com](https://ollama.com)** (macOS, Windows, Linux)
+2. Pull a model:
+   ```bash
+   ollama pull llama3.2
+   ```
+3. Confirm the server is up — this should return JSON:
+   ```bash
+   curl http://localhost:11434/api/tags
+   ```
+4. In the ZANYSURF side panel: **Settings → Provider → Ollama**
+5. Leave the URL as `http://localhost:11434` unless you changed it
+
+**Model guidance:** `llama3.2` is the balanced default. Use `llama3.1:8b` or larger if your machine can take it — bigger models plan multi-step tasks noticeably better. Anything under 3B tends to lose the thread on longer goals.
+
+</details>
+
+<details>
+<summary><b>Option 2: Gemini — cloud, free tier available</b></summary>
+
+1. Get a key at **[Google AI Studio](https://aistudio.google.com/app/apikey)**
+2. In the side panel: **Settings → Provider → Gemini**
+3. Paste the key and save
+
+Set a usage limit on the key in AI Studio. It's good practice for any key that lives in a browser.
+
+</details>
+
+<details>
+<summary><b>Option 3: Other cloud providers (source build only)</b></summary>
+
+OpenAI, Claude, Groq, and Mistral are available when running from source.
+
+1. **Settings → Provider →** pick one
+2. Set a **vault passphrase** when prompted — this encrypts your key with AES-GCM-256
+3. Paste your API key and save
+
+The vault locks when the browser session ends; you re-enter the passphrase to unlock it. See [Security](#security).
+
+</details>
+
+### Step 3 — Run your first task
+
+Type a goal in plain English and press enter:
+
+> *"Search for the top 3 espresso machines under $500 and summarize the differences."*
+
+Watch the side panel — it shows each step as the agent plans, navigates, and acts. Stop it any time with the stop button.
+
+**Good first goals**
+
+- *"Find the current top 5 stories on Hacker News and summarize each in one line."*
+- *"Go to Wikipedia, look up the Apollo 11 mission, and list the crew."*
+- *"Open my GitHub notifications and tell me which need a reply."*
+
+**Tips for reliable runs**
+
+- Be specific about the finish line — *"list the top 3 and stop"* beats *"research espresso machines"*
+- One goal per run; chain follow-ups as separate goals
+- Start on a relevant tab — the agent uses the active page as context
+- Leave **Safe Mode** on until you trust it. It pauses for approval before risky actions
+
+### Step 4 — Troubleshooting
+
+| Symptom | Cause and fix |
+|---|---|
+| "Load unpacked" fails or greys out | You selected the repo root. Select the **`extension/`** folder |
+| Side panel is blank | Reload the extension on the extensions page, then reopen the panel |
+| "Failed to connect to Ollama" | Ollama isn't running. Start it and check `curl http://localhost:11434/api/tags` |
+| Ollama connects but every task stalls | Model too small. Try `ollama pull llama3.2` or larger |
+| "Missing API key (vault locked)" | Unlock the vault with your passphrase in Settings |
+| Agent clicks the wrong element | Heavy SPA. Retry — it backs off and re-reads the DOM. Report the site in an issue |
+| Nothing happens on a page | Some pages block extensions entirely: `edge://`, `chrome://`, the Add-ons store, and most bank sites |
+| `Alt+Z` does nothing | Shortcut conflict. Rebind at `edge://extensions/shortcuts` |
+
+Still stuck? [Open an issue](https://github.com/ZANYANBU/zanysurf-browser-agent/issues) with your browser, provider, and the goal you typed.
 
 ---
 
@@ -73,6 +176,8 @@ Open the side panel → Settings → pick a provider → unlock the vault with a
 
 ## What It Actually Does
 
+Everything listed here is in the source build. Items marked **`src`** are not yet in the published v1.0.1 store build.
+
 **Agent core**
 - Plan-and-execute loop with reflexion and self-correction
 - Multi-tab orchestration with a dependency graph and cross-tab memory
@@ -89,19 +194,21 @@ Open the side panel → Settings → pick a provider → unlock the vault with a
 - Cookie and GDPR consent banner auto-dismiss before DOM mapping
 - Exponential-backoff retry (200 ms / 400 ms) on stale or detached elements
 
-**Macro recorder**
+**Macro recorder** — `src`
 - Record any sequence of clicks, form fills, and navigations into a named macro
 - Stored locally in `chrome.storage.local` — never uploaded
 - Replay on any tab, inspect recorded steps, delete when done
 
-**Automation**
+**Automation** — `src`
 - Scheduler built on `chrome.alarms`: `daily@HH:MM`, `weekly@`, `interval@Nm`
 - Workflow replay with a full audit log
 - Async task engine: parallel multi-goal execution with priority queuing and per-task cancellation
 - Price comparison: opens marketplace tabs in parallel, extracts prices, synthesizes, exports CSV
 - CSV export for any extracted dataset
 
-**Security**
+<a id="security"></a>
+
+**Security** — `src`
 - Credential vault: PBKDF2 key derivation + AES-GCM-256 encryption, unlocked by your passphrase
 - No arbitrary code execution — `execute_js` is restricted to a whitelisted preset allowlist
 - Audit log of every provider key access and agent action
@@ -112,15 +219,15 @@ Open the side panel → Settings → pick a provider → unlock the vault with a
 
 Bring your own key, or run entirely local.
 
-| Provider | Notes |
-|---|---|
-| **Ollama** | Local and private. No key, no network egress |
-| **Gemini** | Long context, good for research sweeps |
-| **OpenAI** | General purpose |
-| **Claude** | Strongest reasoning on complex multi-step goals |
-| **Groq** | Very fast inference |
-| **Mistral** | Cost efficient |
-| **Edge Built-in AI** | Zero setup on Edge, where available |
+| Provider | Store v1.0.1 | Source | Notes |
+|---|:---:|:---:|---|
+| **Ollama** | ✅ | ✅ | Local and private. No key, no network egress |
+| **Gemini** | ✅ | ✅ | Long context, good for research sweeps |
+| **OpenAI** | — | ✅ | General purpose |
+| **Claude** | — | ✅ | Strongest reasoning on complex multi-step goals |
+| **Groq** | — | ✅ | Very fast inference |
+| **Mistral** | — | ✅ | Cost efficient |
+| **Edge Built-in AI** | — | ✅ | Zero setup on Edge, where available |
 
 > **On API keys:** cloud keys are encrypted at rest with AES-GCM-256 using a key derived from your passphrase via PBKDF2 — they are not stored in plaintext. The passphrase is held in memory only while the vault is unlocked for a session. Ollama needs no key at all.
 
@@ -256,11 +363,24 @@ Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
+## Privacy
+
+There is no ZANYSURF backend. Nothing is collected, and there is nothing to collect it with.
+
+- **Ollama** — page content never leaves your machine
+- **Cloud providers** — page context goes only to the provider you selected, using your own key
+- **Storage** — settings, memory, macros, and the encrypted vault live in `chrome.storage.local`
+
+This is declared on the Edge Add-ons listing as *"No personal data collected."* Full detail: [PRIVACY.md](PRIVACY.md).
+
+---
+
 ## Docs
 
 - [Privacy policy](PRIVACY.md) — no data collection, no backend
 - [Changelog](CHANGELOG.md)
 - [Permissions](PERMISSIONS.md)
+- [Edge Add-ons listing](https://microsoftedge.microsoft.com/addons/detail/pmadlohecccigmfcmickngnlikhmnjpa)
 
 ---
 

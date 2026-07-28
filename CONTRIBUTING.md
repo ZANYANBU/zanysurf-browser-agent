@@ -55,5 +55,5 @@ CI runs this on every push and pull request.
 - [ ] README/CHANGELOG updated if behavior changed
 - [ ] Description explains what and why
 
-Built by Anbu Chelvan Valavan.
+Built by V Anbu Chelvan.
 Open to all contributors. MIT licensed.
