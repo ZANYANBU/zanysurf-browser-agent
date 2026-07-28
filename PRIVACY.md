@@ -1,4 +1,4 @@
-# Privacy Policy — ZANYSURF AI Browser Agent
+# Privacy Policy — ZANYSURF Browser Agent
 
 **Effective date:** March 4, 2026  
 **Last updated:** March 6, 2026
@@ -57,4 +57,4 @@ It does **not** mean the extension is watching your browsing in the background, 
 ## Contact
 
 Questions? Open an issue on GitHub:  
-[github.com/ZANYANBU/Chrome_Assist_AI/issues](https://github.com/ZANYANBU/Chrome_Assist_AI/issues)
+[github.com/ZANYANBU/zanysurf-browser-agent/issues](https://github.com/ZANYANBU/zanysurf-browser-agent/issues)

@@ -3,7 +3,7 @@ const path = require('path');
 const vm = require('vm');
 
 function loadBackground() {
-  const code = fs.readFileSync(path.join(process.cwd(), 'background.js'), 'utf8');
+  const code = fs.readFileSync(path.join(process.cwd(), 'extension', 'background.js'), 'utf8');
   const storage = {};
 
   const chrome = {
