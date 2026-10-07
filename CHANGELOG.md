@@ -8,6 +8,25 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Changed
+- Product name unified to **ZANYSURF Browser Agent** across the manifests, `metadata.json`, README, and all docs, matching the published Microsoft Edge Add-ons listing.
+- README gained a full setup guide: the Edge Add-ons install URL, load-unpacked steps for both browsers, per-provider configuration (Ollama, Gemini, and the source-only providers), first-run guidance, and a troubleshooting table.
+- README now distinguishes the published store build (v1.0.1, Ollama + Gemini) from this source tree (v3.0.0, seven providers), so store users are not promised features their build does not have.
+- Author name aligned to **V Anbu Chelvan**, matching the Edge Add-ons publisher.
+- `extension/metadata.json` no longer carries the stale "BYOM AI Browser Agent" name and description.
+- Extension version aligned to `3.0.0` in `manifest.json` and `manifest.edge.json` (both were stuck at `1.1.0` while the changelog and shipped feature set were already at 3.0.0).
+- README rewritten around the Edge Add-ons install link, with the feature list reconciled against the code.
+- Repository URLs updated to `ZANYANBU/zanysurf-browser-agent`.
+
+### Fixed
+- CI was failing on every run: it invoked `npm ci` at a repo root that has no `package.json`, and diffed root-level source files that the directory reorganization had already removed. The workflow now runs the static validator directly and packages `extension/` as a build artifact.
+- `qa/run-static-validation.mjs` read root-level `background.js` / `manifest.json` that no longer exist, and always exited `0` regardless of results. It now validates `extension/` and exits non-zero on failure, so it can actually gate CI.
+- `qa/zanysurf.test.js` loaded `background.js` from the repo root instead of `extension/`.
+
+### Removed
+- README claims with no supporting implementation: Zapier / Make.com "1000+ app" integrations, PDF / DOC / XLS document chat, YouTube transcript summarization with timestamp jumping, and price-drop / back-in-stock alerting.
+- Inaccurate API key warning stating keys sit in plaintext in `chrome.storage.local`. Keys are encrypted at rest with AES-GCM-256 under a PBKDF2-derived key.
+
 ---
 
 ## [3.0.0] — 2026-03-05 — "The Stability & Power Update" (FINAL)
@@ -95,7 +114,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-[Unreleased]: https://github.com/ZANYANBU/Chrome_Assist_AI/compare/v3.0.0...HEAD
-[3.0.0]: https://github.com/ZANYANBU/Chrome_Assist_AI/compare/v2.0.0...v3.0.0
-[2.0.0]: https://github.com/ZANYANBU/Chrome_Assist_AI/compare/v1.0.0...v2.0.0
-[1.0.0]: https://github.com/ZANYANBU/Chrome_Assist_AI/releases/tag/v1.0.0
+[Unreleased]: https://github.com/ZANYANBU/zanysurf-browser-agent/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/ZANYANBU/zanysurf-browser-agent/compare/v2.0.0...v3.0.0
+[2.0.0]: https://github.com/ZANYANBU/zanysurf-browser-agent/compare/v1.0.0...v2.0.0
+[1.0.0]: https://github.com/ZANYANBU/zanysurf-browser-agent/releases/tag/v1.0.0
